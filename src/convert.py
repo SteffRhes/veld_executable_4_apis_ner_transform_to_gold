@@ -210,6 +210,7 @@ def deduplicate(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarr
     The parsed data from the steps beforehand contain multiple redundancies. Both in texts and the
     entities some texts are assigned on. This function removes all of them.
     """
+
     # collect all NER data for each text
     tec_dict = {}
     for tec in text_ent_carrier_list:
@@ -222,8 +223,10 @@ def deduplicate(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarr
     # go through all NER data and remove duplicates, store into new list
     text_ent_carrier_list_new = []
     for tec in tec_dict.values():
+        
         # create new object
         tec_new = TextEntCarrier(text_raw=tec.text_raw, entity_marker_list=[])
+        
         # Create a temporary set to guarantee the uniqueness of tag, beginning, end
         em_set_tmp = set()
         for em in tec.entity_marker_list:
@@ -231,6 +234,7 @@ def deduplicate(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarr
             em_set_tmp.add(em_tuple)
             
         em_list_tmp = list(em_set_tmp)
+
         # sort by all ner data, to make the output data reliably consistent.
         em_list_tmp.sort(key=lambda x: x[2])
         em_list_tmp.sort(key=lambda x: x[1])
@@ -263,19 +267,23 @@ def write_to_file(text_ent_carrier_list: List[TextEntCarrier], output_path):
         
 
 def main():
+
     # conversion
     print("Starting conversion.")
     text_ent_carrier_list = convert_all()
     print(f"Done with conversion. Length of raw converted data: {len(text_ent_carrier_list)}")
+    
     # deduplication
     print("Starting deduplication.")
     text_ent_carrier_list = deduplicate(text_ent_carrier_list)
     print(f"Done with deduplication. Length of deduplicated data: {len(text_ent_carrier_list)}")
     write_to_file(text_ent_carrier_list, "/veld/output/apis_ner__full_entities.json")
+    
     # removing noise
     print("Starting removal of noise in NER tags.")
     text_ent_carrier_list = remove_ner_noise(text_ent_carrier_list)
     print("Done with noise removal.")
+    
     # deduplication of  denoised data
     print("Starting deduplication again for denoised data.")
     text_ent_carrier_list = deduplicate(text_ent_carrier_list)
@@ -285,5 +293,5 @@ def main():
 
 
 if __name__ == "__main__":
-    print("with __main__")
     main()
+
