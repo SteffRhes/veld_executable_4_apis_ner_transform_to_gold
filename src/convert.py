@@ -250,7 +250,7 @@ def deduplicate(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarr
 def write_to_file(text_ent_carrier_list: List[TextEntCarrier], output_path):
     text_ent_dict_list = [tec.to_dict() for tec in text_ent_carrier_list]
     with open(output_path, "w") as f:
-        json.dump(text_ent_dict_list, f, indent=2)
+        json.dump(text_ent_dict_list, f, indent=2, ensure_ascii=False)
         
 
 def main():
