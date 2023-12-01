@@ -114,7 +114,7 @@ def convert_txt_data(file_path):
                     i += 1
                 # we found a non-empty line to use for e if possible, else for t
                 e = None
-                while e == None:
+                while e is None:
                     try:
                         e = eval(lines[i])
                     except SyntaxError:
@@ -279,9 +279,9 @@ def main():
     # deduplication of  denoised data
     print("Starting deduplication again for denoised data.")
     text_ent_carrier_list = deduplicate(text_ent_carrier_list)
-    print(f"Done with deduplication.")
+    print("Done with deduplication.")
     write_to_file(text_ent_carrier_list, "/veld/output/apis_ner__simplified_entities.json")
-    print(f"All Done and persisted to '/veld/output/'.")
+    print("All Done and persisted to '/veld/output/'.")
 
 
 if __name__ == "__main__":
