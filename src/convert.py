@@ -199,9 +199,6 @@ def convert_all() -> List[TextEntCarrier]:
     text_ent_carrier_list.extend(
         convert_pickled_ner_classes("/veld/input/ner_apis_2020-04-30_11:24:09/corpus/trainset.pickle")
     )
-    # evaluate_json_data(
-    #     "/veld/input/ner_apis_2020-04-30_11:24:09/corpus/evalset.json", text_ent_carrier_list
-    # )
     return text_ent_carrier_list
     
     
@@ -250,19 +247,10 @@ def deduplicate(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarr
     return text_ent_carrier_list_new
 
 
-def remove_ner_noise(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarrier]:
-    """Removes suspected noise like 'PER-1337' from NER tags."""
-    for tec in text_ent_carrier_list:
-        for em in tec.entity_marker_list:
-            em.entity_type = re.sub(r"-[0-9]*$", "", em.entity_type)
-    
-    return text_ent_carrier_list
-
-
 def write_to_file(text_ent_carrier_list: List[TextEntCarrier], output_path):
     text_ent_dict_list = [tec.to_dict() for tec in text_ent_carrier_list]
     with open(output_path, "w") as f:
-        json.dump(text_ent_dict_list, f, indent=2)
+        json.dump(text_ent_dict_list, f, indent=2, ensure_ascii=False)
         
 
 def main():
@@ -276,19 +264,7 @@ def main():
     print("Starting deduplication.")
     text_ent_carrier_list = deduplicate(text_ent_carrier_list)
     print(f"Done with deduplication. Length of deduplicated data: {len(text_ent_carrier_list)}")
-    write_to_file(text_ent_carrier_list, "/veld/output/apis_ner__full_entities.json")
-    
-    # removing noise
-    print("Starting removal of noise in NER tags.")
-    text_ent_carrier_list = remove_ner_noise(text_ent_carrier_list)
-    print("Done with noise removal.")
-    
-    # deduplication of  denoised data
-    print("Starting deduplication again for denoised data.")
-    text_ent_carrier_list = deduplicate(text_ent_carrier_list)
-    print("Done with deduplication.")
-    write_to_file(text_ent_carrier_list, "/veld/output/apis_ner__simplified_entities.json")
-    print("All Done and persisted to '/veld/output/'.")
+    write_to_file(text_ent_carrier_list, "/veld/output/apis_oebl__ner__uncleaned.json")
 
 
 if __name__ == "__main__":
