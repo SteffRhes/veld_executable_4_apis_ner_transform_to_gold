@@ -250,7 +250,7 @@ def deduplicate(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarr
 def write_to_file(text_ent_carrier_list: List[TextEntCarrier], output_path):
     text_ent_dict_list = [tec.to_dict() for tec in text_ent_carrier_list]
     with open(output_path, "w") as f:
-        json.dump(text_ent_dict_list, f, indent=2, ensure_ascii=False)
+        json.dump(text_ent_dict_list, f, indent=2)
         
 
 def main():
@@ -264,7 +264,7 @@ def main():
     print("Starting deduplication.")
     text_ent_carrier_list = deduplicate(text_ent_carrier_list)
     print(f"Done with deduplication. Length of deduplicated data: {len(text_ent_carrier_list)}")
-    write_to_file(text_ent_carrier_list, "/veld/output/apis_oebl__ner__uncleaned.json")
+    write_to_file(text_ent_carrier_list, "/veld/output/apis_oebl__ner__1_uncleaned.json")
 
 
 if __name__ == "__main__":
