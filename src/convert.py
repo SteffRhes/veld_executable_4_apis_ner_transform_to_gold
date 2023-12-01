@@ -215,6 +215,7 @@ def deduplicate(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarr
     tec_dict = {}
     for tec in text_ent_carrier_list:
         tec_pre = tec_dict.get(tec.text_raw, None)
+        
         # If some text with entities already exists before it, merge the two
         if tec_pre is not None and tec_pre.entity_marker_list != tec.entity_marker_list:
             tec.entity_marker_list.extend(tec_pre.entity_marker_list)
@@ -232,7 +233,6 @@ def deduplicate(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarr
         for em in tec.entity_marker_list:
             em_tuple = (em.index_beginning, em.index_end, em.entity_type)
             em_set_tmp.add(em_tuple)
-            
         em_list_tmp = list(em_set_tmp)
 
         # sort by all ner data, to make the output data reliably consistent.
@@ -245,7 +245,6 @@ def deduplicate(text_ent_carrier_list: List[TextEntCarrier]) -> List[TextEntCarr
                     index_beginning=em[0], index_end=em[1], entity_type=em[2],
                 )
             )
-            
         text_ent_carrier_list_new.append(tec_new)
         
     return text_ent_carrier_list_new
